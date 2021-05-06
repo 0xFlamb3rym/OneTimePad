@@ -56,14 +56,10 @@ def load_from_file(filename):
     try:
         open(filename, "r")
     except:
-        print("Fichier Introuvable\n")
-        helper()
-        sys.exit()
+        sys.exit("Fichier Introuvable!!!\n")
     # Verifie si le fichier est vide
     if os.path.getsize(filename) == 0:
-        print("Le fichier " + filename + " est vide\n")
-        helper()
-        sys.exit()
+        sys.exit("Le fichier " + filename + " est vide!!!\n")
     # Ouverture du fichier et chargement de la liste
     with open(filename, "r") as file:
         contents = file.read()
@@ -81,7 +77,7 @@ def load_from_text(filename, cyphertext):
     with open(filename, "w") as file:
         for letter in cyphertext:
             file.write(letter)
-    print("Vous trouverez le texte chiffré dans le fichier " + filename)
+    print("Vous trouverez le texte chiffré dans le fichier " + filename + ".")
 
 
 def generate_file(log_filename, filename, key):
@@ -99,7 +95,7 @@ def generate_file(log_filename, filename, key):
             file.write(letter)
         file.write("\n")
     print("Vous trouverez le PAD correspondant au fichier " + filename + " dans le fichier " + log_filename +
-          "\n Referer vous à l'aide en cas d'incompréhension.")
+          "\nReferer vous à l'aide en cas d'incompréhension.")
 
 
 def generate_key(length):
@@ -140,10 +136,8 @@ def decrypt(cyphertext, key):
     contents = []
     # Verifie si le texte et le pad ont la même taille
     if len(cyphertext) != len(key):
-        print("Le PAD et le text sont incompatibles (pas de même tail"
-              "le).\nVerifier le fichier ou le PAD et reessayer!!\n")
-        helper()
-        sys.exit()
+        sys.exit("Le PAD et le text sont incompatibles (pas de même tail"
+                 "le).\nVerifier le fichier ou le PAD et reessayer!!\n")
     # Opération
     for i in range(len(cyphertext)):
         contents.append(chr(ord(cyphertext[i]) ^ ord(key[i])))
@@ -179,6 +173,7 @@ if __name__ == "__main__":
             OAS_contents_SAO = load_from_file(sys.argv[1])
             OAS_pad_SAO = generate_key(len(OAS_contents_SAO))
             OAS_cyphertext_SAO = encode(OAS_contents_SAO, OAS_pad_SAO)
+            print("Texte chiffré: ", end="")
             print("".join(OAS_cyphertext_SAO))
             load_from_text(OAS_defaultName_SAO, OAS_cyphertext_SAO)
             generate_file(OAS_logFileName_SAO, OAS_defaultName_SAO, OAS_pad_SAO)
@@ -198,3 +193,4 @@ if __name__ == "__main__":
                 print("".join(decrypt(OAS_cyphertext_SAO, list(sys.argv[3]))))
             else:
                 print(sys.argv[2] + ": Argument non reconnu")
+                helper()
